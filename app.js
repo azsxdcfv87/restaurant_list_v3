@@ -12,7 +12,7 @@ const db = mongoose.connection
 db.on('error', () => {
   console.log('Mongoose error')
 })
-db.on('open', () => {
+db.once('open', () => {
   console.log('Mongoose open')
 })
 // 加入樣板引擎
