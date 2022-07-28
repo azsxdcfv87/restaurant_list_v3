@@ -1,12 +1,22 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const restaurantList = require('./restaurant.json').results
 const app = express()
 const port = 3000
 // express 預設 hostname = localhost
-
+// 載入 mongoose, 設定連線 mongoDB
+mongoose.connect(process.env.MONGODB_URI)
+// 取得資料庫連線狀態
+const db = mongoose.connection
+db.on('error', () => {
+  console.log('Mongoose error')
+})
+db.on('open', () => {
+  console.log('Mongoose open')
+})
 // 加入樣板引擎
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 // 設定靜態樣式
 app.use(express.static('public'))
@@ -42,5 +52,5 @@ app.get('/search', (req, res) => {
 
 // 設定網址位置
 app.listen(port, () => {
-  console.log(`Express is listening on localhost:${port}`)
+  console.log(`Express is listening on http://localhost:${port}`)
 })

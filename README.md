@@ -1,17 +1,18 @@
 # Restaurant_List Work
 
-
-
 ## 環境建置與需求 (prerequisites)：
 
-* Node.js @16.16.0
-* Express.js @4.16.4
-* express-handlebars @3.0.0
-* Bootstrap @5.1.3
+- Node.js @16.16.0
+- body-parser @1.20.0
+- Express @4.18.1
+- express-handlebars @6.0.6
+- Bootstrap @5.1.3
+- mongoose @6.5.0
 
 ## 安裝與執行步驟 (installation and execution)：
 
 如何啟動你的專案，除了 express install，通常會對應到你在 package.json 設定的腳本，例如 npm run dev。
+
 ```
 安裝 Node.js 以及 npm
 下載檔案到您的本地位置
@@ -36,4 +37,3 @@
 5. 圖片
 
 (3) 使用者可以透過搜尋餐廳名稱以及餐廳類別來找到特定的餐廳
-
