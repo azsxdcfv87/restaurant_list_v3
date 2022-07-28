@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const Restaurants = require('../restaurants.js')
+const Restaurants = require('../Restaurant.js')
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 const db = mongoose.connect
 db.on('error', () => {
@@ -14,7 +14,7 @@ db.once('open', () => {
       console.log('done')
     })
     .catch(error => {
-      console.log('Restaurants error')
+      console.log('Restaurant error')
     })
 })
 

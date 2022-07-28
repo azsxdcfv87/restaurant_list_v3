@@ -13,7 +13,7 @@ const restaurantSchema = new Schema({
   rating: { type: Number, required: true },
   description: { type: String, required: true }
 })
-module.exports = mongoose.model('Todo', todoSchema)
+module.exports = mongoose.model('Restaurant', restaurantSchema)
 
 
   // "id": 1,

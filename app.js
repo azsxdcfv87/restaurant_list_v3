@@ -4,6 +4,8 @@ const exphbs = require('express-handlebars')
 const restaurantList = require('./restaurant.json').results
 const app = express()
 const port = 3000
+
+const Restaurants = require('./models/Restaurant')
 // express 預設 hostname = localhost
 // 載入 mongoose, 設定連線 mongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -25,7 +27,12 @@ app.use(express.static('public'))
 // 以下為網址請求位置
 // 動態產生餐廳資料
 app.get('/', (req, res) => {
-  res.render('index', { restaurantList })
+  // res.render('index', { restaurantList })
+  Restaurants.find() // get Restaurant model all data
+    .lean() // mongoose model object transform clean JavaScript data list
+    .sort({ _id: 'asc' })
+    .then(restaurants => res.render('index', { restaurantList })) // data send index template 
+    .catch(error => console.log(error))
 })
 //2. 使用者可以再點進去看餐廳的詳細資訊：
 // 類別 地址 電話 描述 圖片
@@ -47,6 +54,16 @@ app.get('/search', (req, res) => {
     return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase())
   })
   res.render('index', { restaurantList: filterRestaurants, keyword: keyword })
+})
+// 新增餐廳
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+// 新增資料 create 路由，新增完資料後將資料送給資料庫
+app.post('/restaurants', (req, res) => {
+  return Restaurant.create(req.body) // 存入資料庫
+    .then(() => res.redirect('/')) // 新增完成後導回首頁
+    .catch(error => console.log(error))
 })
 
 
