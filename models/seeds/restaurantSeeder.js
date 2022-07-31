@@ -1,20 +1,22 @@
 const mongoose = require('mongoose')
-const Restaurants = require('../Restaurant.js')
+const Restaurant = require('../restaurant.js')
+const restaurantList = require('../../restaurant.json').results
+
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connect
+
+const db = mongoose.connection
+
 db.on('error', () => {
-  console.log('Mongoose error')
+  console.log('mongodb error!')
 })
 
 db.once('open', () => {
-  console.log('Mongoose open')
+  console.log('mongodb connected!')
 
-  Restaurants.create(resttaurantList)
+  Restaurant.create(restaurantList)
     .then(() => {
-      console.log('done')
+      console.log('done!')
+      db.close()
     })
-    .catch(error => {
-      console.log('Restaurant error')
-    })
+    .catch(error => console.log(error))
 })
-
