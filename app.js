@@ -49,6 +49,43 @@ app.get('/restaurants/:id', (req, res) => {
     .then(restaurantList => res.render('detail', { restaurantList }))
     .catch(error => console.log(error))
 })
+
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then(restaurantList => res.render('edit', { restaurantList }))
+    .catch(error => console.log(error))
+})
+
+//更新餐廳資訊
+app.post('/restaurants/:id', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .then(restaurantList => {
+      restaurantList.name = req.body.name
+      restaurantList.name_en = req.body.name_en
+      restaurantList.category = req.body.category
+      restaurantList.image = req.body.image
+      restaurantList.location = req.body.location
+      restaurantList.phone = req.body.phone
+      restaurantList.google_map = req.body.google_map
+      restaurantList.rating = req.body.rating
+      restaurantList.description = req.body.description
+      return restaurantList.save()
+    })
+    // 回到詳細資料頁面可直接確認修改內容
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch(error => console.log(error))
+})
+// 刪除功能
+app.post('/restaurants/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .then(restaurantList => restaurantList.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
 // 使用者可以透過搜尋餐廳名稱來找到特定的餐廳
 // 使用者可以透過搜尋餐廳類別來找到特定的餐廳
 app.get('/search', (req, res) => {
