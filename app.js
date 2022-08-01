@@ -1,23 +1,14 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 // const restaurantList = require('./restaurant.json').results
 const app = express()
 const port = 3000
 const Restaurant = require('./models/restaurant')
-
+require('./config/mongoose')
 // express 預設 hostname = localhost
-// 載入 mongoose, 設定連線 mongoDB
-mongoose.connect(process.env.MONGODB_URI)
-// 取得資料庫連線狀態
-const db = mongoose.connection
-db.on('error', () => {
-  console.log('Mongoose error')
-})
-db.once('open', () => {
-  console.log('Mongoose open')
-})
+
 // 加入樣板引擎
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
@@ -26,7 +17,8 @@ app.use(express.static('public'))
 
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
-
+// 設定每一筆請求都會透過 methodOverride 進行前置處理
+app.use(methodOverride('_method'))
 // 1. 使用者可以在首頁看到所有餐廳與它們的簡單資料：
 // 餐廳照片 餐廳名稱 餐廳分類 餐廳評分
 // 以下為網址請求位置
@@ -59,7 +51,7 @@ app.get('/restaurants/:id/edit', (req, res) => {
 })
 
 //更新餐廳資訊
-app.post('/restaurants/:id', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
   const id = req.params.id
   return Restaurant.findById(id)
     .then(restaurantList => {
@@ -79,7 +71,7 @@ app.post('/restaurants/:id', (req, res) => {
     .catch(error => console.log(error))
 })
 // 刪除功能
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id', (req, res) => {
   const id = req.params.id
   return Restaurant.findById(id)
     .then(restaurantList => restaurantList.remove())
