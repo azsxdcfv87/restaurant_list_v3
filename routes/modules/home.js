@@ -74,7 +74,8 @@ router.get('/search', (req, res) => {
   const filterRestaurants = restaurantList.filter(restaurant => {
     return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.toLowerCase().includes(keyword.toLowerCase())
   })
-  res.render('index', { restaurantList: filterRestaurants, keyword: keyword })
+  // res.render('index', { restaurantList: filterRestaurants, keyword: keyword })
+  res.render('index', { filterRestaurants, keyword })
 })
 // 新增餐廳
 router.get('/restaurant/new', (req, res) => {
@@ -86,6 +87,5 @@ router.post('/restaurants', (req, res) => {
     .then(() => res.redirect('/')) // 新增完成後導回首頁
     .catch(error => console.log(error))
 })
-
 
 module.exports = router
